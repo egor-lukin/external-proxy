@@ -3,9 +3,9 @@ package internal
 import (
 	"fmt"
 	"github.com/spf13/afero"
+	"os"
 	"os/exec"
 	"path/filepath"
-	"os"
 )
 
 type ProxyServer interface {
@@ -16,14 +16,14 @@ type ProxyServer interface {
 }
 
 type Nginx struct {
-	fs afero.Fs
+	fs        afero.Fs
 	sitesPath string
 	certsPath string
 }
 
 func NewNginx(fs afero.Fs, certsPath, sitesPath string) *Nginx {
 	return &Nginx{
-		fs: fs,
+		fs:        fs,
 		sitesPath: sitesPath,
 		certsPath: certsPath,
 	}
@@ -82,7 +82,7 @@ func (nginx *Nginx) ReadServers() ([]Server, error) {
 		}
 
 		server := Server{
-			Domain:   domain,
+			Domain:  domain,
 			Snippet: string(snippetBytes),
 			Cert: Cert{
 				Certificate: string(crtBytes),

@@ -1,8 +1,8 @@
 package internal
 
 import (
-	"text/template"
 	"bytes"
+	"text/template"
 )
 
 type Cert struct {
@@ -11,12 +11,12 @@ type Cert struct {
 }
 
 type Server struct {
-	Domain   string
-	Snippet  string
-	Cert     Cert
+	Domain  string
+	Snippet string
+	Cert    Cert
 }
 
-func (s Server) FillTemplate(certsPath string) error {
+func (s *Server) FillTemplate(certsPath string) error {
 	tmpl, err := template.New("nginx").Parse(s.Snippet)
 	if err != nil {
 		return err
@@ -27,6 +27,8 @@ func (s Server) FillTemplate(certsPath string) error {
 	if err := tmpl.Execute(&buf, data); err != nil {
 		return err
 	}
+
+	s.Snippet = buf.String()
 
 	return nil
 }

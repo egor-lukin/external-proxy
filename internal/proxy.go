@@ -30,8 +30,8 @@ func SynchronizeServers(nginx ProxyServer, kubeApi ServerSettingsStorage, certsP
 		return
 	}
 
-	for _, s := range remoteServers {
-		s.FillTemplate(certsPath)
+	for i := range remoteServers {
+		remoteServers[i].FillTemplate(certsPath)
 	}
 
 	changedServers := SelectChangedServers(localServers, remoteServers)

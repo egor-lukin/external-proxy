@@ -14,7 +14,7 @@ func TestWriteServer(t *testing.T) {
 	fs.MkdirAll(sitesPath, 0755)
 
 	server := Server{
-		Domain:   "example.com",
+		Domain:  "example.com",
 		Snippet: "server { listen 80; }",
 		Cert: Cert{
 			Certificate: "dummy-cert",
@@ -23,7 +23,7 @@ func TestWriteServer(t *testing.T) {
 	}
 
 	nginx := NewNginx(fs, certsPath, sitesPath)
-    nginx.WriteServer(server)
+	nginx.WriteServer(server)
 
 	// Check cert files
 	crtFile := filepath.Join(certsPath, "example.com.crt")

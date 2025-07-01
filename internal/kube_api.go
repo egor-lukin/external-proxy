@@ -55,7 +55,7 @@ func (api *KubeApi) ReadServers() ([]Server, error) {
 		}
 
 		server := Server{
-			Domain:   domain,
+			Domain:  domain,
 			Snippet: string(serverSnippets),
 		}
 

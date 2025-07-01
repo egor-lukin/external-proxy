@@ -1,19 +1,19 @@
 package internal
 
 import (
-	"testing"
 	"reflect"
+	"testing"
 )
 
 type mockProxyServer struct {
-	servers         []Server
-	writtenServers  []Server
-	removedServers  []Server
-	restartCalled   bool
-	readErr         error
-	writeErr        error
-	removeErr       error
-	restartErr      error
+	servers        []Server
+	writtenServers []Server
+	removedServers []Server
+	restartCalled  bool
+	readErr        error
+	writeErr       error
+	removeErr      error
+	restartErr     error
 }
 
 func (m *mockProxyServer) WriteServer(server Server) error {
@@ -55,8 +55,8 @@ func TestSynchronizeServers(t *testing.T) {
 		{Domain: "b.com", Snippet: "bar", Cert: Cert{Certificate: "certB", PrivateKey: "keyB"}},
 	}
 	remote := []Server{
-		{Domain: "a.com", Snippet: "foo2", Cert: Cert{Certificate: "certA2", PrivateKey: "keyA2"}}, // changed
-		{Domain: "c.com", Snippet: "baz", Cert: Cert{Certificate: "certC", PrivateKey: "keyC"}},    // new
+		{Domain: "a.com", Snippet: "foo2 ({{ .CertsPath }})", Cert: Cert{Certificate: "certA2", PrivateKey: "keyA2"}}, // changed
+		{Domain: "c.com", Snippet: "baz", Cert: Cert{Certificate: "certC", PrivateKey: "keyC"}},                       // new
 	}
 
 	mockNginx := &mockProxyServer{servers: local}
@@ -65,7 +65,7 @@ func TestSynchronizeServers(t *testing.T) {
 	SynchronizeServers(mockNginx, mockKube, "certs_path")
 
 	expectedWritten := []Server{
-		{Domain: "a.com", Snippet: "foo2", Cert: Cert{Certificate: "certA2", PrivateKey: "keyA2"}},
+		{Domain: "a.com", Snippet: "foo2 (certs_path)", Cert: Cert{Certificate: "certA2", PrivateKey: "keyA2"}},
 		{Domain: "c.com", Snippet: "baz", Cert: Cert{Certificate: "certC", PrivateKey: "keyC"}},
 	}
 	expectedRemoved := []Server{
