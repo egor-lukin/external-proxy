@@ -59,10 +59,12 @@ func SynchronizeServers(nginx ProxyServer, kubeApi ServerSettingsStorage, certsP
 		}
 	}
 
-	err = nginx.Restart()
-	if err != nil {
-		log.Printf("Failed update nginx: %v", err)
-	} else {
-		log.Println("Nginx updated")
+	if len(removedServers) > 0 && len(changedServers) > 0 {
+		err = nginx.Restart()
+		if err != nil {
+			log.Printf("Failed update nginx: %v", err)
+		} else {
+			log.Println("Nginx updated")
+		}
 	}
 }
